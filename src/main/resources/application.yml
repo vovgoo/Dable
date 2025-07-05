@@ -1,6 +1,6 @@
 spring:
   application:
-    name: demo
+    name: Dable
   datasource:
     driver-class-name: org.postgresql.Driver
     password: ${DATASOURCE_PASSWORD}
@@ -9,3 +9,21 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+auth:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: ${JWT_EXPIRATION}
