@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: demo
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: ${DATASOURCE_PASSWORD}
+    username: ${DATASOURCE_USERNAME}
+    url: ${DATASOURCE_URL}
+  jpa:
+    hibernate:
+      ddl-auto: update
