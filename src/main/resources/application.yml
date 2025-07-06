@@ -32,3 +32,4 @@ auth:
 
 captcha:
   secret: ${CAPTCHA_SECRET}
+  verify_url: ${CAPTCHA_VERIFY_URL}

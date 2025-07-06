@@ -5,6 +5,7 @@ import com.vovgoo.demo.dtos.auth.JwtResponse;
 import com.vovgoo.demo.dtos.auth.SignInRequest;
 import com.vovgoo.demo.dtos.auth.SignUpRequest;
 import com.vovgoo.demo.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
