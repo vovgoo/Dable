@@ -7,6 +7,8 @@ import com.vovgoo.demo.dtos.auth.SignUpRequest;
 import com.vovgoo.demo.repository.UserRepository;
 import com.vovgoo.demo.service.AuthService;
 import com.vovgoo.demo.service.CaptchaService;
+import com.vovgoo.demo.service.EmailService;
+import com.vovgoo.demo.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,10 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
-    private final CaptchaService captchaService;
     private final PasswordEncoder passwordEncoder;
+    private final CaptchaService captchaService;
+    private final JwtService jwtService;
+    private final EmailService emailService;
 
     @Override
     public JwtResponse signIn(SignInRequest signInRequest) {
