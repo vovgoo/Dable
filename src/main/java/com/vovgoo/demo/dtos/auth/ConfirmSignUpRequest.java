@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class ConfirmSignUpRequest {
-    private String username;
-    private String confirmationCode;
+    private String token;
 }
