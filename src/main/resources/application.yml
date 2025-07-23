@@ -37,3 +37,4 @@ captcha:
 app:
   registration:
     confirmation-url-template: ${CONFIRMATION_URL_TEMPLATE}
+    redis-confirmation-token-expiration-minutes: ${REDIS_CONFIRMATION_TOKEN_EXPIRATION_MINUTES}

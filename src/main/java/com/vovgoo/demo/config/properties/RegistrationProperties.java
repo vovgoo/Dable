@@ -7,4 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class RegistrationProperties {
     private String confirmationUrlTemplate;
+    private Integer redisConfirmationTokenExpirationMinutes;
 }

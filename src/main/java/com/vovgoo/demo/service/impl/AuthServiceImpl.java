@@ -1,6 +1,7 @@
 package com.vovgoo.demo.service.impl;
 
 import com.vovgoo.demo.aop.captcha.VerifyCaptcha;
+import com.vovgoo.demo.config.properties.RegistrationProperties;
 import com.vovgoo.demo.dtos.auth.*;
 import com.vovgoo.demo.entity.User;
 import com.vovgoo.demo.exceptions.TokenNotFoundException;
@@ -29,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 @Transactional(readOnly = true)
 public class AuthServiceImpl implements AuthService {
 
+    private final RegistrationProperties registrationProperties;
     private final UserRepository userRepository;
     private final RedisService redisService;
     private final JsonUtils jsonUtils;
@@ -38,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
 
     private final RegistrationEmailService registrationEmailService;
+
 
     @Override
     @VerifyCaptcha
@@ -78,8 +81,8 @@ public class AuthServiceImpl implements AuthService {
         String token = UUID.randomUUID().toString();
         String signUpTokenKey = RedisKeys.signUpTokenKey(token);
 
-        redisService.setValue(signUpTokenKey, jsonData, 30, TimeUnit.MINUTES);
-        redisService.setValue(signUpEmailKey, signUpTokenKey, 30, TimeUnit.MINUTES);
+        redisService.setValue(signUpTokenKey, jsonData, registrationProperties.getRedisConfirmationTokenExpirationMinutes(), TimeUnit.MINUTES);
+        redisService.setValue(signUpEmailKey, signUpTokenKey, registrationProperties.getRedisConfirmationTokenExpirationMinutes(), TimeUnit.MINUTES);
 
         registrationEmailService.sendRegistrationEmail(signUpRequest.getEmail(), token);
     }
