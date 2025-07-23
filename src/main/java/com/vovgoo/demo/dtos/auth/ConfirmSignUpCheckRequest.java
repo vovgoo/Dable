@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class ConfirmSignUpRequest {
+public class ConfirmSignUpCheckRequest {
 
     @NotBlank
     private String token;
