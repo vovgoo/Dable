@@ -1,9 +1,9 @@
 package com.vovgoo.demo;
 
-import com.vovgoo.demo.config.CaptchaProperties;
-import com.vovgoo.demo.config.JwtProperties;
-import com.vovgoo.demo.config.MailProperties;
-import com.vovgoo.demo.config.RegistrationProperties;
+import com.vovgoo.demo.config.properties.CaptchaProperties;
+import com.vovgoo.demo.config.properties.JwtProperties;
+import com.vovgoo.demo.config.properties.MailProperties;
+import com.vovgoo.demo.config.properties.RegistrationProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

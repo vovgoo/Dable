@@ -1,4 +1,4 @@
-package com.vovgoo.demo.config;
+package com.vovgoo.demo.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

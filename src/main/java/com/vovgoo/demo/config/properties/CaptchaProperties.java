@@ -1,4 +1,4 @@
-package com.vovgoo.demo.config;
+package com.vovgoo.demo.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import lombok.Data;

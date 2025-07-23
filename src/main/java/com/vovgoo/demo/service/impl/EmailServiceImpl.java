@@ -1,6 +1,6 @@
 package com.vovgoo.demo.service.impl;
 
-import com.vovgoo.demo.config.MailProperties;
+import com.vovgoo.demo.config.properties.MailProperties;
 import com.vovgoo.demo.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;

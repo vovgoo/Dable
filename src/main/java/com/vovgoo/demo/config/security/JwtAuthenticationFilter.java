@@ -1,4 +1,4 @@
-package com.vovgoo.demo.config;
+package com.vovgoo.demo.config.security;
 
 import com.vovgoo.demo.service.JwtService;
 import com.vovgoo.demo.service.UserService;

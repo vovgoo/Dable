@@ -1,6 +1,6 @@
 package com.vovgoo.demo.service.impl;
 
-import com.vovgoo.demo.config.CaptchaProperties;
+import com.vovgoo.demo.config.properties.CaptchaProperties;
 import com.vovgoo.demo.dtos.captcha.CaptchaResponse;
 import com.vovgoo.demo.service.CaptchaService;
 import lombok.RequiredArgsConstructor;

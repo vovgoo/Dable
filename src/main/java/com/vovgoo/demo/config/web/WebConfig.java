@@ -1,4 +1,4 @@
-package com.vovgoo.demo.config;
+package com.vovgoo.demo.config.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

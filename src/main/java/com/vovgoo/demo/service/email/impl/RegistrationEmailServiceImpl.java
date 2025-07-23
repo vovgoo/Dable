@@ -1,6 +1,6 @@
 package com.vovgoo.demo.service.email.impl;
 
-import com.vovgoo.demo.config.RegistrationProperties;
+import com.vovgoo.demo.config.properties.RegistrationProperties;
 import com.vovgoo.demo.service.EmailService;
 import com.vovgoo.demo.service.email.RegistrationEmailService;
 import lombok.RequiredArgsConstructor;

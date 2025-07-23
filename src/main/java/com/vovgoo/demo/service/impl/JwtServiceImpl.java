@@ -1,6 +1,6 @@
 package com.vovgoo.demo.service.impl;
 
-import com.vovgoo.demo.config.JwtProperties;
+import com.vovgoo.demo.config.properties.JwtProperties;
 import com.vovgoo.demo.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
