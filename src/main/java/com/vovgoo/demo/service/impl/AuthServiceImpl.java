@@ -4,6 +4,7 @@ import com.vovgoo.demo.aop.captcha.VerifyCaptcha;
 import com.vovgoo.demo.config.properties.RegistrationProperties;
 import com.vovgoo.demo.dtos.auth.*;
 import com.vovgoo.demo.entity.User;
+import com.vovgoo.demo.entity.enums.Role;
 import com.vovgoo.demo.exceptions.TokenNotFoundException;
 import com.vovgoo.demo.exceptions.UserAlreadyExistsException;
 import com.vovgoo.demo.repository.UserRepository;
@@ -109,6 +110,7 @@ public class AuthServiceImpl implements AuthService {
                 .username(signUpRequest.getUsername())
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .role(Role.USER)
                 .build();
 
         userRepository.save(user);
