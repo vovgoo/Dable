@@ -33,3 +33,7 @@ auth:
 captcha:
   secret: ${CAPTCHA_SECRET}
   verify_url: ${CAPTCHA_VERIFY_URL}
+
+app:
+  registration:
+    confirmation-url-template: ${CONFIRMATION_URL_TEMPLATE}

@@ -7,9 +7,9 @@ import com.vovgoo.demo.exceptions.TokenNotFoundException;
 import com.vovgoo.demo.exceptions.UserAlreadyExistsException;
 import com.vovgoo.demo.repository.UserRepository;
 import com.vovgoo.demo.service.AuthService;
-import com.vovgoo.demo.service.EmailService;
 import com.vovgoo.demo.service.JwtService;
 import com.vovgoo.demo.service.RedisService;
+import com.vovgoo.demo.service.email.RegistrationEmailService;
 import com.vovgoo.demo.utils.json.JsonUtils;
 import com.vovgoo.demo.utils.redis.RedisKeys;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +30,14 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+    private final RedisService redisService;
+    private final JsonUtils jsonUtils;
+
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final EmailService emailService;
-    private final RedisService redisService;
-    private final JsonUtils jsonUtils;
+
+    private final RegistrationEmailService registrationEmailService;
 
     @Override
     @VerifyCaptcha
@@ -56,7 +58,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @VerifyCaptcha
     public void signUp(SignUpRequest signUpRequest) {
-
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new UserAlreadyExistsException("User with this email already exists");
         }
@@ -78,28 +79,20 @@ public class AuthServiceImpl implements AuthService {
         String signUpTokenKey = RedisKeys.signUpTokenKey(token);
 
         redisService.setValue(signUpTokenKey, jsonData, 30, TimeUnit.MINUTES);
-        redisService.setValue(signUpEmailKey, token, 30, TimeUnit.MINUTES);
+        redisService.setValue(signUpEmailKey, signUpTokenKey, 30, TimeUnit.MINUTES);
 
-        // Вынести этот блок в другое место наверное надо
-
-        String confirmationLink = "http://frontendurl:8080/api/auth/confirm?token=" + token;
-
-        emailService.sendEmail(signUpRequest.getEmail(), "Регаем тебя тип", confirmationLink);
+        registrationEmailService.sendRegistrationEmail(signUpRequest.getEmail(), token);
     }
 
     @Override
     public Boolean confirmSignUpCheck(ConfirmSignUpCheckRequest confirmSignUpCheckRequest) {
-
         String signUpTokenKey = RedisKeys.signUpTokenKey(confirmSignUpCheckRequest.getToken());
-        String email = redisService.getValue(signUpTokenKey);
-
-        return email != null;
+        return redisService.getValue(signUpTokenKey) != null;
     }
 
     @Override
     @Transactional
     public JwtResponse confirmSignUp(ConfirmSignUpRequest confirmSignUpRequest) {
-
         String signUpTokenKey = RedisKeys.signUpTokenKey(confirmSignUpRequest.getToken());
         String jsonData = redisService.getValue(signUpTokenKey);
 
