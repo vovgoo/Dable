@@ -14,4 +14,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
     }
+
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<String> tokenNotFoundException(TokenNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(e.getMessage());
+    }
 }
