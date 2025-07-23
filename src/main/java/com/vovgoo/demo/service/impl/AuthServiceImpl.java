@@ -1,16 +1,16 @@
 package com.vovgoo.demo.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vovgoo.demo.aop.captcha.VerifyCaptcha;
 import com.vovgoo.demo.dtos.auth.*;
 import com.vovgoo.demo.entity.User;
 import com.vovgoo.demo.exceptions.TokenNotFoundException;
+import com.vovgoo.demo.exceptions.UserAlreadyExistsException;
 import com.vovgoo.demo.repository.UserRepository;
 import com.vovgoo.demo.service.AuthService;
 import com.vovgoo.demo.service.EmailService;
 import com.vovgoo.demo.service.JwtService;
 import com.vovgoo.demo.service.RedisService;
+import com.vovgoo.demo.utils.json.JsonUtils;
 import com.vovgoo.demo.utils.redis.RedisKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,8 +34,8 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final EmailService emailService;
-    private final ObjectMapper objectMapper;
     private final RedisService redisService;
+    private final JsonUtils jsonUtils;
 
     @Override
     @VerifyCaptcha
@@ -57,8 +57,15 @@ public class AuthServiceImpl implements AuthService {
     @VerifyCaptcha
     public void signUp(SignUpRequest signUpRequest) {
 
-        String signUpEmailKey = RedisKeys.signUpEmailKey(signUpRequest.getEmail());
+        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+            throw new UserAlreadyExistsException("User with this email already exists");
+        }
 
+        if(userRepository.existsByUsername(signUpRequest.getUsername())) {
+            throw new UserAlreadyExistsException("User with this username already exists");
+        }
+
+        String signUpEmailKey = RedisKeys.signUpEmailKey(signUpRequest.getEmail());
         String oldSignUpTokenKey = redisService.getValue(signUpEmailKey);
 
         if (oldSignUpTokenKey != null) {
@@ -66,25 +73,18 @@ public class AuthServiceImpl implements AuthService {
             redisService.deleteValue(oldSignUpTokenKey);
         }
 
-        try {
-            String jsonData = objectMapper.writeValueAsString(signUpRequest);
+        String jsonData = jsonUtils.toJson(signUpRequest);
+        String token = UUID.randomUUID().toString();
+        String signUpTokenKey = RedisKeys.signUpTokenKey(token);
 
-            String token = UUID.randomUUID().toString();
+        redisService.setValue(signUpTokenKey, jsonData, 30, TimeUnit.MINUTES);
+        redisService.setValue(signUpEmailKey, token, 30, TimeUnit.MINUTES);
 
-            String signUpTokenKey = RedisKeys.signUpTokenKey(token);
+        // Вынести этот блок в другое место наверное надо
 
-            redisService.setValue(signUpTokenKey, jsonData, 30, TimeUnit.MINUTES);
-            redisService.setValue(signUpEmailKey, token, 30, TimeUnit.MINUTES);
+        String confirmationLink = "http://frontendurl:8080/api/auth/confirm?token=" + token;
 
-            // Вынести этот блок в другое место наверное надо
-
-            String confirmationLink = "http://frontendurl:8080/api/auth/confirm?token=" + token;
-
-            emailService.sendEmail(signUpRequest.getEmail(), "Регаем тебя тип", confirmationLink);
-
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error of serializable object");
-        }
+        emailService.sendEmail(signUpRequest.getEmail(), "Регаем тебя тип", confirmationLink);
     }
 
     @Override
@@ -107,25 +107,20 @@ public class AuthServiceImpl implements AuthService {
             throw new TokenNotFoundException("Sign-up confirmation token not found or expired");
         }
 
-        try {
-            SignUpRequest signUpRequest = objectMapper.readValue(jsonData, SignUpRequest.class);
+        SignUpRequest signUpRequest = jsonUtils.fromJson(jsonData, SignUpRequest.class);
 
-            User user = User.builder()
-                    .username(signUpRequest.getUsername())
-                    .email(signUpRequest.getEmail())
-                    .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                    .build();
+        User user = User.builder()
+                .username(signUpRequest.getUsername())
+                .email(signUpRequest.getEmail())
+                .password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .build();
 
-            userRepository.save(user);
+        userRepository.save(user);
 
-            String token = jwtService.generateToken(user.getUsername());
+        String token = jwtService.generateToken(user.getUsername());
 
-            return JwtResponse.builder()
-                    .token(token)
-                    .build();
-
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error of serializable object");
-        }
+        return JwtResponse.builder()
+                .token(token)
+                .build();
     }
 }

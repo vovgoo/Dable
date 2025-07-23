@@ -2,12 +2,13 @@ package com.vovgoo.demo.utils.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vovgoo.demo.exceptions.JsonProcessingExceptionWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class jsonUtils {
+public class JsonUtils {
 
     private final ObjectMapper objectMapper;
 
@@ -15,7 +16,7 @@ public class jsonUtils {
         try {
             return objectMapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("JSON serialization failed", e);
+            throw new JsonProcessingExceptionWrapper("JSON serialization failed", e);
         }
     }
 
@@ -23,7 +24,7 @@ public class jsonUtils {
         try {
             return objectMapper.readValue(json, clazz);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("JSON deserialization failed", e);
+            throw new JsonProcessingExceptionWrapper("JSON deserialization failed", e);
         }
     }
 }
