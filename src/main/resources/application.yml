@@ -9,7 +9,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
@@ -22,8 +21,20 @@ spring:
           auth: true
           starttls:
             enable: true
+  data:
+    redis:
+      url: ${REDIS_URL}
 
 auth:
   jwt:
     secret: ${JWT_SECRET}
     expiration: ${JWT_EXPIRATION}
+
+captcha:
+  secret: ${CAPTCHA_SECRET}
+  verify_url: ${CAPTCHA_VERIFY_URL}
+
+app:
+  registration:
+    confirmation-url-template: ${CONFIRMATION_URL_TEMPLATE}
+    redis-confirmation-token-expiration-minutes: ${REDIS_CONFIRMATION_TOKEN_EXPIRATION_MINUTES}
