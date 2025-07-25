@@ -42,7 +42,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final RegistrationEmailService registrationEmailService;
 
-
     @Override
     @VerifyCaptcha
     public JwtResponse signIn(SignInRequest signInRequest) {
@@ -97,6 +96,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public JwtResponse confirmSignUp(ConfirmSignUpRequest confirmSignUpRequest) {
+
         String signUpTokenKey = RedisKeys.signUpTokenKey(confirmSignUpRequest.getToken());
         String jsonData = redisService.getValue(signUpTokenKey);
 
@@ -105,6 +105,11 @@ public class AuthServiceImpl implements AuthService {
         }
 
         SignUpRequest signUpRequest = jsonUtils.fromJson(jsonData, SignUpRequest.class);
+
+        String signUpEmailKey = RedisKeys.signUpEmailKey(signUpRequest.getEmail());
+
+        redisService.deleteValue(signUpEmailKey);
+        redisService.deleteValue(signUpTokenKey);
 
         User user = User.builder()
                 .username(signUpRequest.getUsername())
