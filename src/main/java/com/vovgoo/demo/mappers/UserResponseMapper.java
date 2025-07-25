@@ -11,7 +11,6 @@ public interface UserResponseMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "username", source = "username")
     @Mapping(target = "email", source = "email")
-    @Mapping(target = "password", source = "password")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "role", source = "role")
     UserResponse toDto(User user);
