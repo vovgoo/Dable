@@ -85,6 +85,11 @@ public class AuthController {
                     content = @Content()
             ),
             @ApiResponse(
+                    responseCode = "429",
+                    description = "Too many requests — registration already in process for this email.",
+                    content = @Content()
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "Internal server error — failed to process registration.",
                     content = @Content()
