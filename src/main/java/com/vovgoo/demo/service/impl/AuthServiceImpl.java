@@ -5,6 +5,7 @@ import com.vovgoo.demo.config.properties.RegistrationProperties;
 import com.vovgoo.demo.dtos.auth.*;
 import com.vovgoo.demo.entity.User;
 import com.vovgoo.demo.entity.enums.Role;
+import com.vovgoo.demo.exceptions.RegistrationInProgressException;
 import com.vovgoo.demo.exceptions.TokenNotFoundException;
 import com.vovgoo.demo.exceptions.UserAlreadyExistsException;
 import com.vovgoo.demo.repository.UserRepository;
@@ -59,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @VerifyCaptcha
+//    @VerifyCaptcha
     public void signUp(SignUpRequest signUpRequest) {
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new UserAlreadyExistsException("User with this email already exists");
@@ -70,19 +71,17 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String signUpEmailKey = RedisKeys.signUpEmailKey(signUpRequest.getEmail());
-        String oldSignUpTokenKey = redisService.getValue(signUpEmailKey);
-
-        if (oldSignUpTokenKey != null) {
-            redisService.deleteValue(signUpEmailKey);
-            redisService.deleteValue(oldSignUpTokenKey);
-        }
-
-        String jsonData = jsonUtils.toJson(signUpRequest);
         String token = UUID.randomUUID().toString();
         String signUpTokenKey = RedisKeys.signUpTokenKey(token);
+        String jsonData = jsonUtils.toJson(signUpRequest);
+
+        boolean success = redisService.setIfAbsent(signUpEmailKey, signUpTokenKey, registrationProperties.getRedisConfirmationTokenExpirationMinutes(), TimeUnit.MINUTES);
+
+        if (!success) {
+            throw new RegistrationInProgressException("Registration already in process for this email. Please wait.");
+        }
 
         redisService.setValue(signUpTokenKey, jsonData, registrationProperties.getRedisConfirmationTokenExpirationMinutes(), TimeUnit.MINUTES);
-        redisService.setValue(signUpEmailKey, signUpTokenKey, registrationProperties.getRedisConfirmationTokenExpirationMinutes(), TimeUnit.MINUTES);
 
         registrationEmailService.sendRegistrationEmail(signUpRequest.getEmail(), token);
     }
