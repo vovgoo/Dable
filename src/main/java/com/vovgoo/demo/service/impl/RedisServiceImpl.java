@@ -14,6 +14,11 @@ public class RedisServiceImpl implements RedisService {
     private final StringRedisTemplate stringRedisTemplate;
 
     @Override
+    public boolean setIfAbsent(String key, String value, long timeout, TimeUnit unit) {
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setIfAbsent(key, value, timeout, unit));
+    }
+
+    @Override
     public void setValue(String key, String value) {
         stringRedisTemplate.opsForValue().set(key, value);
     }

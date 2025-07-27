@@ -48,6 +48,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleEmailSendingException(EmailSendingException e) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Failed to send email: " + e.getMessage());
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(RegistrationInProgressException.class)
+    public ResponseEntity<String> handleRegistrationInProgress(RegistrationInProgressException e) {
+        return ResponseEntity
+                .status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(e.getMessage());
     }
 }
