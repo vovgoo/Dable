@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-//    @VerifyCaptcha
+    @VerifyCaptcha
     public void signUp(SignUpRequest signUpRequest) {
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new UserAlreadyExistsException("User with this email already exists");

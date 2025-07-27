@@ -24,7 +24,7 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage message = createMimeMessage(to, subject, htmlBody);
             mailSender.send(message);
         } catch (MessagingException | MailException ex) {
-            throw new EmailSendingException("Failed to send email to" + to);
+            throw new EmailSendingException("Failed to send email to" + to + ": " + ex.getMessage());
         }
     }
 

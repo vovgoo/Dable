@@ -46,6 +46,5 @@ public class RegistrationEmailServiceImpl implements RegistrationEmailService {
     public void recover(RuntimeException e, String email, String token) {
         redisService.deleteValue(RedisKeys.signUpEmailKey(email));
         redisService.deleteValue(RedisKeys.signUpTokenKey(token));
-        System.out.println("problem");
     }
 }
