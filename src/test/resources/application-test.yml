@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: Dable
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  mail:
+    host: localhost
+    port: 1025
+    username: test@mail.test
+    password: test
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+  data:
+    redis:
+      url: redis://localhost:6379
+
+auth:
+  jwt:
+    secret: test-jwt-secret
+    expiration: 3600000
+
+captcha:
+  secret: test-captcha-secret
+  verify_url: https://dummy-captcha.test/verify
+
+app:
+  registration:
+    confirmation-url-template: https://dummy.test/confirm?token={token}
+    redis-confirmation-token-expiration-minutes: 60
