@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
@@ -27,9 +28,12 @@ public class CaptchaServiceImpl implements CaptchaService {
         CaptchaResponse captchaResponse = webClient.post()
                 .uri(captchaProperties.getVerifyUrl())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .bodyValue(body)
+                .body(BodyInserters.fromFormData(body))
                 .retrieve()
                 .bodyToMono(CaptchaResponse.class)
+                .onErrorReturn(CaptchaResponse.builder()
+                        .success(false)
+                        .build())
                 .block();
 
         return captchaResponse != null && captchaResponse.isSuccess();
