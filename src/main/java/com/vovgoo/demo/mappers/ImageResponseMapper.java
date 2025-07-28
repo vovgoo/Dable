@@ -10,7 +10,7 @@ public interface ImageResponseMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "originalName", source = "originalName")
-    @Mapping(target = "url", source = "url")
+    @Mapping(target = "key", source = "key")
     @Mapping(target = "size", source = "size")
     @Mapping(target = "mimeType", source = "mimeType")
     @Mapping(target = "createdAt", source = "createdAt")

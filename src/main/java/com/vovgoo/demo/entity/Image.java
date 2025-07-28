@@ -32,7 +32,7 @@ public class Image {
     private String originalName;
 
     @NotBlank
-    private String url;
+    private String key;
 
     @NotNull
     private Long size;

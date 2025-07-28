@@ -27,11 +27,11 @@ public class ImageResponse {
     private String originalName;
 
     @Schema(
-            description = "URL для доступа к изображению",
-            example = "https://example.com/images/a1b2c3d4.png",
+            description = "Ключ для доступа к изображению",
+            example = "a1b2c3d4.png",
             requiredMode = Schema.RequiredMode.REQUIRED
     )
-    private String url;
+    private String key;
 
     @Schema(
             description = "Размер файла изображения в байтах",
