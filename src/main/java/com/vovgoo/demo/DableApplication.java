@@ -1,9 +1,6 @@
 package com.vovgoo.demo;
 
-import com.vovgoo.demo.config.properties.CaptchaProperties;
-import com.vovgoo.demo.config.properties.JwtProperties;
-import com.vovgoo.demo.config.properties.MailProperties;
-import com.vovgoo.demo.config.properties.RegistrationProperties;
+import com.vovgoo.demo.config.properties.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,7 +11,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 		JwtProperties.class,
 		MailProperties.class,
 		CaptchaProperties.class,
-		RegistrationProperties.class
+		RegistrationProperties.class,
+		YandexS3Properties.class
 })
 @EnableAsync
 @EnableJpaAuditing

@@ -57,4 +57,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.TOO_MANY_REQUESTS)
                 .body(e.getMessage());
     }
+
+    @ExceptionHandler(ImageUploadException.class)
+    public ResponseEntity<String> handleImageUploadException(ImageUploadException e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e.getMessage());
+    }
 }

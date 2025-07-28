@@ -37,6 +37,14 @@ captcha:
   secret: test-captcha-secret
   verify_url: https://dummy-captcha.test/verify
 
+yandex:
+  s3:
+    access-key: test-access-key
+    secret-key: test-secret-key
+    bucket: test-bucket
+    region: ru-test
+    endpoint: https://test-s3.yandex.test
+
 app:
   registration:
     confirmation-url-template: https://dummy.test/confirm?token={token}

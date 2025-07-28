@@ -18,12 +18,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Not found user with username: " + username));
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Not found user with username: " + username));
     }
 
     @Override
     public User getCurrentUser() {
-        String username = securityService.getAuthenticatedUsername();
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Not found user with username: " + username));
+        String username = securityService.getCurrentUserDetails().getUsername();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 }
