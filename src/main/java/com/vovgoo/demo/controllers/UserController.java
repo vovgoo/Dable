@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,10 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.vovgoo.demo.config.swagger.OpenApiConstants.SECURITY_SCHEME_NAME;
 
+@Tag(
+        name = "User Profile",
+        description = "Endpoints for managing the authenticated user's profile, including retrieving profile information and uploading a profile image."
+)
 @RestController
 @RequestMapping("/api/v1/self")
 @SecurityRequirement(name = SECURITY_SCHEME_NAME)
