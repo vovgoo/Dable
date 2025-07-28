@@ -16,6 +16,7 @@ import com.vovgoo.demo.service.email.RegistrationEmailService;
 import com.vovgoo.demo.utils.json.JsonUtils;
 import com.vovgoo.demo.utils.redis.RedisKeys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -95,20 +96,16 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public JwtResponse confirmSignUp(ConfirmSignUpRequest confirmSignUpRequest) {
-
         String signUpTokenKey = RedisKeys.signUpTokenKey(confirmSignUpRequest.getToken());
-        String jsonData = redisService.getValue(signUpTokenKey);
+        String jsonData = redisService.getAndDeleteValue(signUpTokenKey);
 
         if(jsonData == null) {
             throw new TokenNotFoundException("Sign-up confirmation token not found or expired");
         }
 
         SignUpRequest signUpRequest = jsonUtils.fromJson(jsonData, SignUpRequest.class);
-
         String signUpEmailKey = RedisKeys.signUpEmailKey(signUpRequest.getEmail());
-
         redisService.deleteValue(signUpEmailKey);
-        redisService.deleteValue(signUpTokenKey);
 
         User user = User.builder()
                 .username(signUpRequest.getUsername())
@@ -117,7 +114,11 @@ public class AuthServiceImpl implements AuthService {
                 .role(Role.USER)
                 .build();
 
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new UserAlreadyExistsException("User with this email or username already exists");
+        }
 
         String token = jwtService.generateToken(user.getUsername());
 

@@ -19,6 +19,11 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public String getAndDeleteValue(String key) {
+        return stringRedisTemplate.opsForValue().getAndDelete(key);
+    }
+
+    @Override
     public void setValue(String key, String value) {
         stringRedisTemplate.opsForValue().set(key, value);
     }
