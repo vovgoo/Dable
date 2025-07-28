@@ -1,5 +1,6 @@
 package com.vovgoo.demo.dtos.user;
 
+import com.vovgoo.demo.dtos.image.ImageResponse;
 import com.vovgoo.demo.entity.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -30,6 +31,12 @@ public class UserResponse {
             requiredMode = Schema.RequiredMode.REQUIRED
     )
     private String email;
+
+    @Schema(
+            description = "Аватар пользователя в виде объекта изображения",
+            requiredMode = Schema.RequiredMode.NOT_REQUIRED
+    )
+    private ImageResponse profileImage;
 
     @Schema(
             description = "Дата и время создания пользователя",

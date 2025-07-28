@@ -47,6 +47,10 @@ public class User implements UserDetails {
     @NotBlank
     private String password;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image profileImage;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
