@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,18 +39,30 @@ public class ImageServiceImpl implements ImageService {
 
             RequestBody requestBody = RequestBody.fromInputStream(inputStream, file.getSize());
 
-            PutObjectResponse putObjectResponse = s3Client.putObject(putObjectRequest, requestBody);
+            s3Client.putObject(putObjectRequest, requestBody);
 
             Image image = Image.builder()
                     .originalName(file.getOriginalFilename())
                     .mimeType(file.getContentType())
                     .size(file.getSize())
-                    .url(putObjectResponse.eTag())
+                    .key(key)
                     .build();
 
             return imageRepository.save(image);
         } catch (IOException e) {
             throw new ImageUploadException("Failed to upload image to cloud storage", e);
         }
+    }
+
+    @Override
+    public void deleteImage(String key) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(yandexS3Properties.getBucket())
+                .key(key)
+                .build();
+
+        s3Client.deleteObject(deleteObjectRequest);
+
+        imageRepository.deleteByKey(key);
     }
 }
