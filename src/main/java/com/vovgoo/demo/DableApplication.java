@@ -12,7 +12,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 		MailProperties.class,
 		CaptchaProperties.class,
 		RegistrationProperties.class,
-		YandexS3Properties.class
+		YandexS3Properties.class,
+		StripeProperties.class
 })
 @EnableAsync
 @EnableJpaAuditing
