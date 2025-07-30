@@ -36,6 +36,7 @@ dependencies {
 	implementation 'org.springframework.retry:spring-retry:2.0.12'
 	implementation platform('software.amazon.awssdk:bom:2.32.9')
 	implementation 'software.amazon.awssdk:apache-client:2.32.9'
+	implementation 'com.stripe:stripe-java:29.3.0'
 	implementation 'software.amazon.awssdk:s3'
 	implementation 'software.amazon.awssdk:auth'
 	implementation 'software.amazon.awssdk:regions'
