@@ -35,6 +35,8 @@ public class User implements UserDetails {
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
     private UUID id;
 
+    private String stripeUserId;
+
     @NotBlank
     @Column(unique = true)
     @Size(min = 5, max = 50)
