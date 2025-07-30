@@ -34,6 +34,11 @@ captcha:
   secret: ${CAPTCHA_SECRET}
   verify_url: ${CAPTCHA_VERIFY_URL}
 
+stripe:
+  api:
+    secret-key: ${STRIPE_SECRET_KEY}
+    published-key: ${STRIPE_PUBLISHED_KEY}
+
 yandex:
   s3:
     access-key: ${YANDEX_S3_ACCESS_KEY}
